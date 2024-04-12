@@ -33,14 +33,18 @@ Because of this methodology this is safe to use in your projects today, but I co
 
 > ## Disclaimer
 >
-> I am not the most versed in regards to publishing open-source projects to npm, and so there is an issue with how this package is bundled which is evidenced by how you are currently forced to import the CookieConsetProvider into your applicaiton.
+> We are NPM novices to put it lightly, this is the first package any of us have ever released ourselves. So if there are any issues we'd love if you could create an issue, and are open to pull requests and any other feedback or expertise you might have to share. 
+>
+> We hope you have a great experience with the thought we've put into providing the right balance between configuration and customization. Allowing access to all of the google specific features while abstracting away some of the complexity. 
+>
+> Thank you so much for trying trnsprncy
 
 
 
 ## Installation
 
 ```bash
-npm install @gshah.dev/transparency
+npm install @trnsprncy/os
 ```
 
 
@@ -51,7 +55,7 @@ npm install @gshah.dev/transparency
 // app/layout.tsx
 
 
-import { CookieConsentProvider } from '@gshah.dev/transparency/dist/context/consent-provider';
+import { CookieConsentProvider } from '@trnsprncy/os';
 
 export default function RootLayout({
   children,
@@ -97,5 +101,5 @@ export default function RootLayout({
 
 ## Roadmap
 
-- [ ] Fix: build module issue.
+- [x] Fix: build module issue.
 - [ ] Add support for 3rd party/custom const tags.
