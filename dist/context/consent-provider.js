@@ -69,11 +69,11 @@ props) {
             gtag("consent", "default", defaultConsent);
             redact && gtag("set", redactionCookie, true);
             setHasConsent(!!Object.keys(cookies).length);
-            handlers.onSuccess("Transparency: GTM has been initialized");
+            handlers.onSuccess("trnsprncy: GTM has been initialized");
         }
         else {
-            handlers.onError("Transparency: GTM could not be initialized");
-            throw new Error("Transparency: GTM requires gtag function to be defined");
+            handlers.onError("trnsprncy: GTM could not be initialized");
+            throw new Error("trnsprncy: GTM requires gtag function to be defined");
         }
     }, [enabled, necessaryTags, redact, cookies]);
     var updateGTMConsent = useCallback(function (consent) {
@@ -82,7 +82,7 @@ props) {
             gTag("consent", "update", consent);
         }
         else
-            console.warn("Transparency: gtag not found2");
+            console.warn("trnsprncy: gtag not found2");
     }, [dataLayerName, gtagName]);
     var handleConsentUpdate = useCallback(function (consentUpdate) {
         try {
@@ -94,10 +94,10 @@ props) {
             var consent = convertCookieToConsent(_updatedCookie);
             // update the consent in GTM
             updateGTMConsent(consent);
-            handlers.onSuccess("Transparency: Consent updated");
+            handlers.onSuccess("trnsprncy: Consent updated");
         }
         catch (error) {
-            handlers.onError("Transparency: Consent could not be updated");
+            handlers.onError("trnsprncy: Consent could not be updated");
             console.error(error);
         }
     }, [consentCookie, expiry, updateGTMConsent, selectedKeys]);
