@@ -1,0 +1,22 @@
+// Consent mgr constants
+export const CONSENT_COOKIE_NAME = "app-consent";
+export const DATA_LAYER = "dataLayer";
+export const TAG_MANAGER_KEY = "gtag";
+
+export const redactionCookie = "ads_data_redaction";
+
+export const cookieExpiry = 60 * 60 * 24 * 7; // Set expiration (1 week)
+
+// Consent categories
+export const NECESSARY_TAGS = [
+  "security_storage",
+  "functionality_storage",
+  "personalization_storage",
+];
+
+export const ANALYTICS_TAGS = [
+  "ad_storage",
+  "analytics_storage",
+  "ad_personalization",
+  "ad_user_data",
+];

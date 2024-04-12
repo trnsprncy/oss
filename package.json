@@ -1,0 +1,43 @@
+{
+  "name": "@gshah.dev/transparency",
+  "version": "0.0.45",
+  "description": "A package for Google Tag Manager integration and consent handling in Next.js applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "rm -rf dist && npm run build"
+  },
+  "keywords": [
+    "google-tag-manager",
+    "gtm",
+    "consent",
+    "next.js",
+    "react"
+  ],
+  "author": "GShah <gaurang.r.shah@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaurangrshah/transparency.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gaurangrshah/transparency/issues"
+  },
+  "dependencies": {
+    "@next/third-parties": "^14.1.4",
+    "cookies-next": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/react": "^18.2.71",
+    "typescript": "^5.4.3"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "next": "^14.1.0"
+  }
+}
