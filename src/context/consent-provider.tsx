@@ -103,10 +103,10 @@ export default function CookieConsentProvider(
       redact && gtag("set", redactionCookie, true);
 
       setHasConsent(!!Object.keys(cookies).length);
-      handlers.onSuccess("Transparency: GTM has been initialized");
+      handlers.onSuccess("trnsprncy: GTM has been initialized");
     } else {
-      handlers.onError("Transparency: GTM could not be initialized");
-      throw new Error("Transparency: GTM requires gtag function to be defined");
+      handlers.onError("trnsprncy: GTM could not be initialized");
+      throw new Error("trnsprncy: GTM requires gtag function to be defined");
     }
   }, [enabled, necessaryTags, redact, cookies]);
 
@@ -115,7 +115,7 @@ export default function CookieConsentProvider(
       const gTag = gtagFn(dataLayerName, gtagName);
       if (typeof gTag === "function") {
         gTag("consent", "update", consent);
-      } else console.warn("Transparency: gtag not found2");
+      } else console.warn("trnsprncy: gtag not found2");
     },
     [dataLayerName, gtagName]
   );
@@ -137,9 +137,9 @@ export default function CookieConsentProvider(
         const consent = convertCookieToConsent(_updatedCookie);
         // update the consent in GTM
         updateGTMConsent(consent);
-        handlers.onSuccess("Transparency: Consent updated");
+        handlers.onSuccess("trnsprncy: Consent updated");
       } catch (error) {
-        handlers.onError("Transparency: Consent could not be updated");
+        handlers.onError("trnsprncy: Consent could not be updated");
         console.error(error);
       }
     },

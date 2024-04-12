@@ -1,13 +1,13 @@
-# Transparency
+# Trnsprncy
 Consent Manager for Next.js v14. (App Router Only)
 
 ---
 
-## What is Transparency
+## What is Trnsprncy
 
-Very simply transparency is the easiest way to configure and manage Google Tag Manager's [Consent Mode v2](https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced) in Next.js applications that use the App Router. We handle all the functionality internally and expose a provider which you can wrap around your consent banner. You can also use our exposed utiltiy functions to help manage the consent across your application. 
+Very simply trnsprncy is the easiest way to configure and manage Google Tag Manager's [Consent Mode v2](https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced) in Next.js applications that use the App Router. We handle all the functionality internally and expose a provider which you can wrap around your consent banner. You can also use our exposed utiltiy functions to help manage the consent across your application. 
 
-![transparency-bg](./transparency-bg.jpg)
+![trnsprncy-bg](./transparency-bg.jpg)
 
 ## This tool is currently in pre-release Beta
 
