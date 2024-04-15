@@ -34,11 +34,18 @@ import {
   convertTagsToCookies,
 } from "../utils/cookie-conversion-utils";
 import { handlers } from "../utils/handlers";
-import type { AnalyticsTags, BrowserCookies, ConsentResult, NecessaryAnalyticsTagsTupleArrays, NecessaryTags } from "../types";
+import type {
+  AnalyticsTags,
+  BrowserCookies,
+  ConsentResult,
+  NecessaryAnalyticsTagsTupleArrays,
+  NecessaryTags,
+} from "../types";
 
 type CookieConsentProviderProps = {
   consentCookie?: string;
-  necessaryTags: NecessaryTags[];
+  necessaryTags: NecessaryTags[]; // @TODO: make necessary tags unrequired
+  // @TODO: rename necesssaryTags to essentialTags
   analyticsTags?: AnalyticsTags[];
   enabled?: boolean;
   expiry?: number;
