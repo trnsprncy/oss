@@ -1,50 +1,32 @@
 # Trnsprncy
-Consent Manager for Next.js v14. (App Router Only)
+A modern easy-to-use [Google Tag Manager](https://marketingplatform.google.com/about/tag-manager/) component optimized for Next.js applications.
+
+- [Compliant with Consent Mode v2](https://developers.google.com/tag-platform/security/concepts/consent-mode)
+- GDPR | ePrivacy | CCPA | UK GDPR
 
 ---
 
 ## What is Trnsprncy
 
-Very simply trnsprncy is the easiest way to configure and manage Google Tag Manager's [Consent Mode v2](https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced) in Next.js applications that use the App Router. We handle all the functionality internally and expose a provider which you can wrap around your consent banner. You can also use our exposed utiltiy functions to help manage the consent across your application. 
+**rnsprncy** simplifies cookie consent management for developers at its core. As fellow developers who’ve grappled with the intricacies of optimizing Google Tag Manager and addressing performance issues in our applications, we deeply understand the challenge. The repetitive task of re-implementing the same cookie consent pattern across multiple applications can be exhausting.
 
-![trnsprncy-bg](./transparency-bg.jpg)
+**trnsprncy** offers an optimal open-source solution to one of the most significant challenges in building performant web applications. By using **trnsprncy**, you can focus on your core business logic without being bogged down by the complexities of varying international cookie compliance guidelines. It’s time to streamline your cookie consent process and ensure a seamless user experience.
 
-## This tool is currently in pre-release Beta
-
-Due to my own lack of familiarity with managing packages via npm, I will be moving slowing and attempting not to break things. Also this package depends on the experimental `@next/third-parties/google` which was made as a collaboration between Google and the Next.js team. The package uses the built-in Next.js Script component to  optimize the loading of the standard Google Tag Manager script. The package uses a service worker to handle your GTM events giving us a very effective way of using Google Tag Manage and mitigating all previously existing perfomance issues caused by the script. 
-
-Because of this methodology this is safe to use in your projects today, but I could really use your feedback on how to make this package better and ensure that it does in fact meet your needs and comply with GTM's consent mode v2 policies and standards. For the near future please know that the only breaking change you should expect is the path we use to import the CookieConsentProvider into our applications. 
-
-
-
-## Requirements
-
-- [ ] Next.js v14.1 +
-- [ ] App Directory
+![trnsprncy-bg](./transparency-bg.png)
 
 
 
 ## Dependencies
 
-- [ ] cookies-next
-- [ ] @next/third-parties
-
-
-
-> ## Disclaimer
->
-> We are NPM novices to put it lightly, this is the first package any of us have ever released ourselves. So if there are any issues we'd love if you could create an issue, and are open to pull requests and any other feedback or expertise you might have to share. 
->
-> We hope you have a great experience with the thought we've put into providing the right balance between configuration and customization. Allowing access to all of the google specific features while abstracting away some of the complexity. 
->
-> Thank you so much for trying trnsprncy
+- [cookies-next](https://github.com/andreizanik/cookies-next)
+- [@next/third-parties](https://github.com/vercel/next.js/tree/canary/packages/third-parties) by [GoogleChromeLabs/third-party-capital](GoogleChromeLabs/third-party-capital)
 
 
 
 ## Installation
 
 ```bash
-npm install @trnsprncy/os
+npm install @trnsprncy/oss
 ```
 
 
@@ -55,7 +37,7 @@ npm install @trnsprncy/os
 // app/layout.tsx
 
 
-import { CookieConsentProvider } from '@trnsprncy/os';
+import ConsentProvider from '@trnsprncy/oss';
 
 export default function RootLayout({
   children,
@@ -74,7 +56,7 @@ export default function RootLayout({
             "personalization_storage",
           ]}
         >
-          <Banner/>
+          <Banner/> // use any banner component or the @trnsprncy/ui kit
         </CookieConsentProvider>
 
       </body>
@@ -101,5 +83,6 @@ export default function RootLayout({
 
 ## Roadmap
 
-- [x] Fix: build module issue.
 - [ ] Add support for 3rd party/custom const tags.
+- [ ] internationalization ([i8n](https://en.wikipedia.org/wiki/Internationalization_and_localization))
+
