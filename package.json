@@ -1,6 +1,6 @@
 {
-  "name": "@trnsprncy/os",
-  "version": "0.0.1",
+  "name": "@trnsprncy/oss",
+  "version": "0.0.12",
   "description": "A package for Google Tag Manager integration and consent handling in Next.js applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,10 +22,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/trnsprncy/os.git"
+    "url": "https://github.com/trnsprncy/oss.git"
   },
   "bugs": {
-    "url": "https://github.com/trnsprncy/os/issues"
+    "url": "https://github.com/trnsprncy/oss/issues"
   },
   "dependencies": {
     "@next/third-parties": "^14.1.4",
