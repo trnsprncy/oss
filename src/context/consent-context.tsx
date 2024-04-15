@@ -1,10 +1,10 @@
 import React, { createContext } from "react";
-import type { BrowserCookies, NecessaryAnalyticsTagsTupleArrays } from "../types";
+import type { BrowserCookies, EssentialAnalyticsTagsTupleArrays } from "../types";
 
 export const ConsentManager = createContext<
   | {
       consentCookie: string;
-      tags: NecessaryAnalyticsTagsTupleArrays;
+      tags: EssentialAnalyticsTagsTupleArrays;
       hasConsent: boolean;
     }
   | undefined

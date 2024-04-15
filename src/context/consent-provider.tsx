@@ -18,7 +18,7 @@ import {
 import { gtagFn } from "../utils/gtag";
 import {
   ANALYTICS_TAGS,
-  NECESSARY_TAGS,
+  ESSENTIAL_TAGS,
   CONSENT_COOKIE_NAME,
   DATA_LAYER,
   TAG_MANAGER_KEY,
@@ -26,7 +26,7 @@ import {
   redactionCookie,
 } from "../utils/constants";
 import {
-  checkNecessaryTags,
+  checkEssentialTags,
   checkTargetingTags,
 } from "../utils/validation-utils";
 import {
@@ -38,14 +38,15 @@ import type {
   AnalyticsTags,
   BrowserCookies,
   ConsentResult,
-  NecessaryAnalyticsTagsTupleArrays,
-  NecessaryTags,
+  EssentialAnalyticsTagsTupleArrays,
+  EssentialTags,
 } from "../types";
 
-type CookieConsentProviderProps = {
+type NotEmptyArray<T> = [T, ...T[]];
+
+type TrnsprncyProviderProps = {
   consentCookie?: string;
-  necessaryTags: NecessaryTags[]; // @TODO: make necessary tags unrequired
-  // @TODO: rename necesssaryTags to essentialTags
+  essentialTags?: NotEmptyArray<EssentialTags>;
   analyticsTags?: AnalyticsTags[];
   enabled?: boolean;
   expiry?: number;
@@ -58,18 +59,18 @@ type CookieConsentProviderProps = {
  *
  *
  * @export
- * @param {PropsWithChildren<CookieConsentProviderProps>} {
- *   consentCookie: string, necessaryTags: NecessaryTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ * @param {PropsWithChildren<TrnsprncyProviderProps>} {
+ *   consentCookie: string, essentialTags: EssentialTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
-export default function CookieConsentProvider(
+export default function TrnsprncyProvider(
   // type AdditionalTags<T extends string> = T[]; // @TODO: add support for additional tags
-  props: PropsWithChildren<CookieConsentProviderProps>
+  props: PropsWithChildren<TrnsprncyProviderProps>
 ) {
   const {
     consentCookie = CONSENT_COOKIE_NAME, // the name of the cookie that stores the user's consent
-    necessaryTags,
+    essentialTags,
     analyticsTags,
     enabled = true,
     expiry = cookieExpiry,
@@ -84,26 +85,26 @@ export default function CookieConsentProvider(
     // has consent starts off as equal to enabled value
     // we use the layoutEffect to check if the user has provided consent.
   );
-  const [selectedKeys] = useState<NecessaryAnalyticsTagsTupleArrays>(() => {
+  const [selectedKeys] = useState<EssentialAnalyticsTagsTupleArrays>(() => {
     // coerce tags into selectedKeys shape
-    const hasNecessaryTags = necessaryTags && checkNecessaryTags(necessaryTags);
+    const hasEssentialTags = essentialTags && checkEssentialTags(essentialTags);
     const hasAnalyticsTags = analyticsTags && checkTargetingTags(analyticsTags);
 
     return [
-      hasNecessaryTags ? necessaryTags : [], // necessary tags should never be empty
+      hasEssentialTags ? essentialTags : [], // essential tags should never be empty
       hasAnalyticsTags ? analyticsTags : [], // analytics tags can be empty
     ];
   });
 
   useLayoutEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !essentialTags?.length) return;
     const gtag = gtagFn(DATA_LAYER, TAG_MANAGER_KEY);
     if (typeof gtag === "function") {
       // set the default consent based on the user provided initialConsent
       // if the user has not provided any initialConsent, then the default consent will be set to 'denied' for all tags
 
-      const defaultConsent = getInitialPermissions(necessaryTags, [
-        ...NECESSARY_TAGS,
+      const defaultConsent = getInitialPermissions(essentialTags, [
+        ...ESSENTIAL_TAGS,
         ...ANALYTICS_TAGS,
       ]);
       gtag("consent", "default", defaultConsent);
@@ -115,7 +116,7 @@ export default function CookieConsentProvider(
       handlers.onError("trnsprncy: GTM could not be initialized");
       throw new Error("trnsprncy: GTM requires gtag function to be defined");
     }
-  }, [enabled, necessaryTags, redact, cookies]);
+  }, [enabled, essentialTags, redact, cookies]);
 
   const updateGTMConsent = useCallback(
     (consent: Partial<ConsentResult>) => {

@@ -1,7 +1,7 @@
-import { AnalyticsTags, NecessaryTags } from "../types";
+import { AnalyticsTags, EssentialTags } from "../types";
 
 type TagDetails = {
-  [key in NecessaryTags | AnalyticsTags]: {
+  [key in EssentialTags | AnalyticsTags]: {
     label: string;
     description: string;
   };
@@ -10,7 +10,7 @@ type TagDetails = {
 export const tagDetails: TagDetails = {
   security_storage: {
     label: 'Security Related Cookies',
-    description: 'Cookies necessary for securely authenticating users.',
+    description: 'Cookies essential for securely authenticating users.',
   },
   functionality_storage: {
     label: 'Functionality Related Cookies',
@@ -39,6 +39,6 @@ export const tagDetails: TagDetails = {
 };
 
 export const categoryDescriptions = {
-  necessary: 'These cookies are essential for the website to function',
+  essential: 'These cookies are essential for the website to function',
   analytics: 'These cookies help us to improve your experience on our website',
 };

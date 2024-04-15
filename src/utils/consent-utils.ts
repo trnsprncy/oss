@@ -1,6 +1,6 @@
 import { setCookie } from "cookies-next";
 import { cookieExpiry } from "./constants";
-import { AnalyticsTags, ConsentResult, NecessaryTags } from "../types";
+import { ConsentResult } from "../types";
 
 // Each of these utils are used by the consent manager component
 
@@ -39,24 +39,24 @@ export function setConsentCookies(
 }
 
 /**
- * Compare the necessary tags with the analytics tags
- * This will return an object where the necessary tags as keys
+ * Compare the essential tags with the analytics tags
+ * This will return an object where the essential tags as keys
  * are all "granted" and the rest are "denied"
  *
  * @export
- * @param  {string[]} necessaryTags
+ * @param  {string[]} essentialTags
  * @param  {string[]} analyticsTags
  * @return ConsentResult {*}
  *
  */
 export function getInitialPermissions(
-  necessaryTags: string[],
+  essentialTags: string[],
   analyticsTags: string[]
 ): ConsentResult {
   const consentResult = {} as ConsentResult;
 
-  for (const tag of [...necessaryTags, ...analyticsTags]) {
-    consentResult[tag as keyof ConsentResult] = necessaryTags.includes(tag)
+  for (const tag of [...essentialTags, ...analyticsTags]) {
+    consentResult[tag as keyof ConsentResult] = essentialTags.includes(tag)
       ? "granted"
       : "denied";
   }

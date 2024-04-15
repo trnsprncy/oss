@@ -1,26 +1,26 @@
-import { ANALYTICS_TAGS, NECESSARY_TAGS } from "./constants";
-import type { AnalyticsTags, NecessaryTags } from "../types";
+import { ANALYTICS_TAGS, ESSENTIAL_TAGS } from "./constants";
+import type { AnalyticsTags, EssentialTags } from "../types";
 
 // These utils are used by consent manager component to validate the tags that the user has opted out of
 
 /**
- * Check if the user has opted out of all necessary tags
- * This will return a warning if the user has opted out of all necessary tags
+ * Check if the user has opted out of all essential tags
+ * This will return a warning if the user has opted out of all essential tags
  *
- * @param {NecessaryTags[]} tags
+ * @param {EssentialTags[]} tags
  * @return {*} {boolean}
  */
-export function checkNecessaryTags(tags: NecessaryTags[]) {
+export function checkEssentialTags(tags: EssentialTags[]) {
   if (!tags.length || !Array.isArray(tags)) {
     console.warn(
-      "Analytics and tracking is not enabled. No necessary tags were provided. Please ensure that this was intentional"
+      "Analytics and tracking is not enabled. No essential tags were provided. Please ensure that this was intentional"
     );
     return false;
   }
   return tags.every((tag) => {
-    const isNecessaryTag = NECESSARY_TAGS.includes(tag);
-    if (!isNecessaryTag) console.warn("Invalid necessary tag provided: ", tag);
-    return isNecessaryTag;
+    const isEssentialTag = ESSENTIAL_TAGS.includes(tag);
+    if (!isEssentialTag) console.warn("Invalid essential tag provided: ", tag);
+    return isEssentialTag;
   });
 }
 

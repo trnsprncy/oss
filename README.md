@@ -12,7 +12,7 @@ A modern easy-to-use [Google Tag Manager](https://marketingplatform.google.com/a
 
 **trnsprncy** offers an optimal open-source solution to one of the most significant challenges in building performant web applications. By using **trnsprncy**, you can focus on your core business logic without being bogged down by the complexities of varying international cookie compliance guidelines. It’s time to streamline your cookie consent process and ensure a seamless user experience.
 
-![trnsprncy-bg](./transparency-bg.png)
+![trnsprncy-bg](./trnsprncy-bg.png)
 
 
 
@@ -49,15 +49,15 @@ export default function RootLayout({
       <body>
           {children}
         
-          <CookieConsentProvider
+          <TrnsprncyProvider
           consentCookie="app-consent"
-          necessaryTags={[
+          essentialTags={[
             "functionality_storage",
             "personalization_storage",
           ]}
         >
           <Banner/> // use any banner component or the @trnsprncy/ui kit
-        </CookieConsentProvider>
+        </TrnsprncyProvider>
 
       </body>
     </html>
@@ -72,9 +72,9 @@ export default function RootLayout({
 | Name          | Default         | required | Description                                                  |
 | ------------- | --------------- | -------- | ------------------------------------------------------------ |
 | consentCookie | `'app-consent'` | **no**   | key name of the cookie used to manage user's consent         |
-| necessaryTags | `undefined`     | **yes**  | array of google consent tags for personalization and functionality storage consent |
+| essentialTags | `undefined`     | **yes**  | array of google consent tags for personalization and functionality storage consent |
 | analyticsTags | `undefined`     | **no**   | array of google consent tags for ads, analytics and monitoring related storage consent. |
-| enabled       | `true`          | **no**   | globally enable or disable the `CookieConsentProvider`       |
+| enabled       | `true`          | **no**   | globally enable or disable the `TrnsprncyProvider`       |
 | redact        | `true`          | **no**   | adds the global `'ads_data_redaction'` consent which redacts all sensitive user related data from the tracking data. |
 | dataLayerName | 'dataLayer'     | **no**   | sets the name used for the dataLayer object added by google tag manager to the user's window object. |
 | gtagName      | 'gtag'          | **no**   | sets the name used for the gtag function that is used to handle the user's google-tag-manager consent. |
