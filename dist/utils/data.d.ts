@@ -1,13 +1,13 @@
-import { AnalyticsTags, NecessaryTags } from "../types";
+import { AnalyticsTags, EssentialTags } from "../types";
 type TagDetails = {
-    [key in NecessaryTags | AnalyticsTags]: {
+    [key in EssentialTags | AnalyticsTags]: {
         label: string;
         description: string;
     };
 };
 export declare const tagDetails: TagDetails;
 export declare const categoryDescriptions: {
-    necessary: string;
+    essential: string;
     analytics: string;
 };
 export {};

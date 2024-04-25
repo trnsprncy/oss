@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { getConsent } from "./consent-utils";
-import { NECESSARY_TAGS } from "./constants";
+import { ESSENTIAL_TAGS } from "./constants";
 /**
  * Convert the cookie object to a consent object
  *
@@ -27,7 +27,7 @@ export function convertCookieToConsent(cookie) {
 /**
  * Convert the user provided tags into a cookie object
  *
- * @param {NecessaryAnalyticsTagsTupleArrays} selectedTags
+ * @param {EssentialAnalyticsTagsTupleArrays} selectedTags
  * @return {*}  {Permission}
  */
 export function convertTagsToCookies(selectedTags) {
@@ -37,7 +37,7 @@ export function convertTagsToCookies(selectedTags) {
         if (tags === null || tags === void 0 ? void 0 : tags.length) {
             for (var _a = 0, tags_1 = tags; _a < tags_1.length; _a++) {
                 var tag = tags_1[_a];
-                cookies[tag] = !!NECESSARY_TAGS.includes(tag);
+                cookies[tag] = !!ESSENTIAL_TAGS.includes(tag);
             }
         }
     }

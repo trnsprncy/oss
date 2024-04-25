@@ -39,21 +39,21 @@ export function setConsentCookies(cookies, appCookie, customExpiry) {
     }
 }
 /**
- * Compare the necessary tags with the analytics tags
- * This will return an object where the necessary tags as keys
+ * Compare the essential tags with the analytics tags
+ * This will return an object where the essential tags as keys
  * are all "granted" and the rest are "denied"
  *
  * @export
- * @param  {string[]} necessaryTags
+ * @param  {string[]} essentialTags
  * @param  {string[]} analyticsTags
  * @return ConsentResult {*}
  *
  */
-export function getInitialPermissions(necessaryTags, analyticsTags) {
+export function getInitialPermissions(essentialTags, analyticsTags) {
     var consentResult = {};
-    for (var _i = 0, _a = __spreadArray(__spreadArray([], necessaryTags, true), analyticsTags, true); _i < _a.length; _i++) {
+    for (var _i = 0, _a = __spreadArray(__spreadArray([], essentialTags, true), analyticsTags, true); _i < _a.length; _i++) {
         var tag = _a[_i];
-        consentResult[tag] = necessaryTags.includes(tag)
+        consentResult[tag] = essentialTags.includes(tag)
             ? "granted"
             : "denied";
     }

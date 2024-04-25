@@ -1,8 +1,9 @@
 import { PropsWithChildren } from "react";
-import type { AnalyticsTags, NecessaryTags } from "../types";
-type CookieConsentProviderProps = {
+import type { AnalyticsTags, EssentialTags } from "../types";
+type NotEmptyArray<T> = [T, ...T[]];
+type TrnsprncyProviderProps = {
     consentCookie?: string;
-    necessaryTags: NecessaryTags[];
+    essentialTags?: NotEmptyArray<EssentialTags>;
     analyticsTags?: AnalyticsTags[];
     enabled?: boolean;
     expiry?: number;
@@ -14,12 +15,12 @@ type CookieConsentProviderProps = {
  *
  *
  * @export
- * @param {PropsWithChildren<CookieConsentProviderProps>} {
- *   consentCookie: string, necessaryTags: NecessaryTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ * @param {PropsWithChildren<TrnsprncyProviderProps>} {
+ *   consentCookie: string, essentialTags: EssentialTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
-export default function CookieConsentProvider(props: PropsWithChildren<CookieConsentProviderProps>): import("react/jsx-runtime").JSX.Element;
+export default function TrnsprncyProvider(props: PropsWithChildren<TrnsprncyProviderProps>): import("react/jsx-runtime").JSX.Element;
 export {};
 /**
  * @TODO:

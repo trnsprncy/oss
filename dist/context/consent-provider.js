@@ -26,24 +26,24 @@ import { sendGTMEvent, GoogleTagManager } from "@next/third-parties/google";
 import { ConsentManager, ConsentDispatch } from "./consent-context";
 import { setConsentCookies, getInitialPermissions, } from "../utils/consent-utils";
 import { gtagFn } from "../utils/gtag";
-import { ANALYTICS_TAGS, NECESSARY_TAGS, CONSENT_COOKIE_NAME, DATA_LAYER, TAG_MANAGER_KEY, cookieExpiry, redactionCookie, } from "../utils/constants";
-import { checkNecessaryTags, checkTargetingTags, } from "../utils/validation-utils";
+import { ANALYTICS_TAGS, ESSENTIAL_TAGS, CONSENT_COOKIE_NAME, DATA_LAYER, TAG_MANAGER_KEY, cookieExpiry, redactionCookie, } from "../utils/constants";
+import { checkEssentialTags, checkTargetingTags, } from "../utils/validation-utils";
 import { convertCookieToConsent, convertTagsToCookies, } from "../utils/cookie-conversion-utils";
 import { handlers } from "../utils/handlers";
 /**
  *
  *
  * @export
- * @param {PropsWithChildren<CookieConsentProviderProps>} {
- *   consentCookie: string, necessaryTags: NecessaryTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ * @param {PropsWithChildren<TrnsprncyProviderProps>} {
+ *   consentCookie: string, essentialTags: EssentialTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
-export default function CookieConsentProvider(
+export default function TrnsprncyProvider(
 // type AdditionalTags<T extends string> = T[]; // @TODO: add support for additional tags
 props) {
     var _a = props.consentCookie, consentCookie = _a === void 0 ? CONSENT_COOKIE_NAME : _a, // the name of the cookie that stores the user's consent
-    necessaryTags = props.necessaryTags, analyticsTags = props.analyticsTags, _b = props.enabled, enabled = _b === void 0 ? true : _b, _c = props.expiry, expiry = _c === void 0 ? cookieExpiry : _c, _d = props.redact, redact = _d === void 0 ? true : _d, _e = props.dataLayerName, dataLayerName = _e === void 0 ? DATA_LAYER : _e, _f = props.gtagName, gtagName = _f === void 0 ? TAG_MANAGER_KEY : _f, children = props.children;
+    essentialTags = props.essentialTags, analyticsTags = props.analyticsTags, _b = props.enabled, enabled = _b === void 0 ? true : _b, _c = props.expiry, expiry = _c === void 0 ? cookieExpiry : _c, _d = props.redact, redact = _d === void 0 ? true : _d, _e = props.dataLayerName, dataLayerName = _e === void 0 ? DATA_LAYER : _e, _f = props.gtagName, gtagName = _f === void 0 ? TAG_MANAGER_KEY : _f, children = props.children;
     var cookies = JSON.parse(getCookie(consentCookie) || "{}");
     var _g = useState(enabled
     // has consent starts off as equal to enabled value
@@ -51,21 +51,21 @@ props) {
     ), hasConsent = _g[0], setHasConsent = _g[1];
     var selectedKeys = useState(function () {
         // coerce tags into selectedKeys shape
-        var hasNecessaryTags = necessaryTags && checkNecessaryTags(necessaryTags);
+        var hasEssentialTags = essentialTags && checkEssentialTags(essentialTags);
         var hasAnalyticsTags = analyticsTags && checkTargetingTags(analyticsTags);
         return [
-            hasNecessaryTags ? necessaryTags : [], // necessary tags should never be empty
+            hasEssentialTags ? essentialTags : [], // essential tags should never be empty
             hasAnalyticsTags ? analyticsTags : [], // analytics tags can be empty
         ];
     })[0];
     useLayoutEffect(function () {
-        if (!enabled)
+        if (!enabled || !(essentialTags === null || essentialTags === void 0 ? void 0 : essentialTags.length))
             return;
         var gtag = gtagFn(DATA_LAYER, TAG_MANAGER_KEY);
         if (typeof gtag === "function") {
             // set the default consent based on the user provided initialConsent
             // if the user has not provided any initialConsent, then the default consent will be set to 'denied' for all tags
-            var defaultConsent = getInitialPermissions(necessaryTags, __spreadArray(__spreadArray([], NECESSARY_TAGS, true), ANALYTICS_TAGS, true));
+            var defaultConsent = getInitialPermissions(essentialTags, __spreadArray(__spreadArray([], ESSENTIAL_TAGS, true), ANALYTICS_TAGS, true));
             gtag("consent", "default", defaultConsent);
             redact && gtag("set", redactionCookie, true);
             setHasConsent(!!Object.keys(cookies).length);
@@ -75,7 +75,7 @@ props) {
             handlers.onError("trnsprncy: GTM could not be initialized");
             throw new Error("trnsprncy: GTM requires gtag function to be defined");
         }
-    }, [enabled, necessaryTags, redact, cookies]);
+    }, [enabled, essentialTags, redact, cookies]);
     var updateGTMConsent = useCallback(function (consent) {
         var gTag = gtagFn(dataLayerName, gtagName);
         if (typeof gTag === "function") {

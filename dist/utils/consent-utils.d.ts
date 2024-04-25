@@ -20,14 +20,14 @@ export declare function getConsent(condition: boolean): "granted" | "denied";
  */
 export declare function setConsentCookies(cookies: ConsentResult, appCookie: string, customExpiry?: number): void;
 /**
- * Compare the necessary tags with the analytics tags
- * This will return an object where the necessary tags as keys
+ * Compare the essential tags with the analytics tags
+ * This will return an object where the essential tags as keys
  * are all "granted" and the rest are "denied"
  *
  * @export
- * @param  {string[]} necessaryTags
+ * @param  {string[]} essentialTags
  * @param  {string[]} analyticsTags
  * @return ConsentResult {*}
  *
  */
-export declare function getInitialPermissions(necessaryTags: string[], analyticsTags: string[]): ConsentResult;
+export declare function getInitialPermissions(essentialTags: string[], analyticsTags: string[]): ConsentResult;

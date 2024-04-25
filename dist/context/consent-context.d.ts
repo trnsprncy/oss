@@ -1,8 +1,8 @@
 import React from "react";
-import type { BrowserCookies, NecessaryAnalyticsTagsTupleArrays } from "../types";
+import type { BrowserCookies, EssentialAnalyticsTagsTupleArrays } from "../types";
 export declare const ConsentManager: React.Context<{
     consentCookie: string;
-    tags: NecessaryAnalyticsTagsTupleArrays;
+    tags: EssentialAnalyticsTagsTupleArrays;
     hasConsent: boolean;
 } | undefined>;
 export declare const ConsentDispatch: React.Context<{

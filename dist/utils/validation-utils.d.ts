@@ -1,12 +1,12 @@
-import type { AnalyticsTags, NecessaryTags } from "../types";
+import type { AnalyticsTags, EssentialTags } from "../types";
 /**
- * Check if the user has opted out of all necessary tags
- * This will return a warning if the user has opted out of all necessary tags
+ * Check if the user has opted out of all essential tags
+ * This will return a warning if the user has opted out of all essential tags
  *
- * @param {NecessaryTags[]} tags
+ * @param {EssentialTags[]} tags
  * @return {*} {boolean}
  */
-export declare function checkNecessaryTags(tags: NecessaryTags[]): boolean;
+export declare function checkEssentialTags(tags: EssentialTags[]): boolean;
 /**
  * Check if the user has opted out of all tracking tags
  * This will return a warning if the user has opted out of all tracking tags
