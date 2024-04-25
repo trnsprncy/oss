@@ -13,10 +13,3 @@ export const ESSENTIAL_TAGS = [
   "functionality_storage",
   "personalization_storage",
 ];
-
-export const ANALYTICS_TAGS = [
-  "ad_storage",
-  "analytics_storage",
-  "ad_personalization",
-  "ad_user_data",
-];

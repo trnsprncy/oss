@@ -1,7 +1,7 @@
-import { AnalyticsTags, EssentialTags } from "../types";
+import { NonEssentialTags, EssentialTags } from "../types";
 
 type TagDetails = {
-  [key in EssentialTags | AnalyticsTags]: {
+  [key in EssentialTags | NonEssentialTags]: {
     label: string;
     description: string;
   };
@@ -19,22 +19,6 @@ export const tagDetails: TagDetails = {
   personalization_storage: {
     label: 'Personalization Related Cookies',
     description: 'Cookies for enhanced functionality and personalization.',
-  },
-  ad_storage: {
-    label: 'Personalized Marketing Related Cookies',
-    description: 'Cookies for targeted content delivery based on interests.',
-  },
-  analytics_storage: {
-    label: 'Analytics Related Cookies',
-    description: 'Cookies for measuring and improving site performance.',
-  },
-  ad_personalization: {
-    label: 'Personalization Related Cookies',
-    description: 'Cookies for enhanced functionality and personalization.',
-  },
-  ad_user_data: {
-    label: 'User Data Related Cookies',
-    description: 'Cookies for targeted content delivery based on interests.',
   },
 };
 

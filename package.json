@@ -1,6 +1,6 @@
 {
   "name": "@trnsprncy/oss",
-  "version": "0.0.01",
+  "version": "0.0.17",
   "description": "A package for Google Tag Manager integration and consent handling in Next.js applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

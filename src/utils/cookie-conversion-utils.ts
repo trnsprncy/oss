@@ -1,6 +1,6 @@
 import { getConsent } from "./consent-utils";
 import { ESSENTIAL_TAGS } from "./constants";
-import type { BrowserCookies, ConsentResult, EssentialAnalyticsTagsTupleArrays } from "../types";
+import type { BrowserCookies, ConsentResult, EssentialTagsTupleArrays } from "../types";
 
 /**
  * Convert the cookie object to a consent object
@@ -22,11 +22,11 @@ export function convertCookieToConsent(
 /**
  * Convert the user provided tags into a cookie object
  *
- * @param {EssentialAnalyticsTagsTupleArrays} selectedTags
+ * @param {EssentialTagsTupleArrays} selectedTags
  * @return {*}  {Permission}
  */
 export function convertTagsToCookies(
-  selectedTags: EssentialAnalyticsTagsTupleArrays
+  selectedTags: EssentialTagsTupleArrays
 ): Partial<BrowserCookies> {
   const cookies = {} as BrowserCookies;
 

@@ -17,7 +17,6 @@ import {
 } from "../utils/consent-utils";
 import { gtagFn } from "../utils/gtag";
 import {
-  ANALYTICS_TAGS,
   ESSENTIAL_TAGS,
   CONSENT_COOKIE_NAME,
   DATA_LAYER,
@@ -35,10 +34,10 @@ import {
 } from "../utils/cookie-conversion-utils";
 import { handlers } from "../utils/handlers";
 import type {
-  AnalyticsTags,
+  NonEssentialTags,
   BrowserCookies,
   ConsentResult,
-  EssentialAnalyticsTagsTupleArrays,
+  EssentialTagsTupleArrays,
   EssentialTags,
 } from "../types";
 
@@ -47,7 +46,7 @@ type NotEmptyArray<T> = [T, ...T[]];
 type TrnsprncyProviderProps = {
   consentCookie?: string;
   essentialTags?: NotEmptyArray<EssentialTags>;
-  analyticsTags?: AnalyticsTags[];
+  nonEssentialTags?: NonEssentialTags[];
   enabled?: boolean;
   expiry?: number;
   redact?: boolean;
@@ -60,7 +59,7 @@ type TrnsprncyProviderProps = {
  *
  * @export
  * @param {PropsWithChildren<TrnsprncyProviderProps>} {
- *   consentCookie: string, essentialTags: EssentialTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ *   consentCookie: string, essentialTags: EssentialTags[], nonEssentialTags: NonEssentialTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
@@ -71,7 +70,7 @@ export default function TrnsprncyProvider(
   const {
     consentCookie = CONSENT_COOKIE_NAME, // the name of the cookie that stores the user's consent
     essentialTags,
-    analyticsTags,
+    nonEssentialTags,
     enabled = true,
     expiry = cookieExpiry,
     redact = true,
@@ -79,20 +78,33 @@ export default function TrnsprncyProvider(
     gtagName = TAG_MANAGER_KEY,
     children,
   } = props;
+
+  if (nonEssentialTags) {
+    // ensure that non-essential tags are not duplicated in the essential tags
+    nonEssentialTags.forEach((tag) => {
+      if (essentialTags?.includes(tag)) {
+        throw new Error(
+          `trnsprncy: ${tag} is an essential tag and cannot be included in the non-essential tags array.`
+        );
+      }
+    });
+  }
+
   const cookies = JSON.parse(getCookie(consentCookie) || "{}");
   const [hasConsent, setHasConsent] = useState<boolean>(
     enabled
     // has consent starts off as equal to enabled value
     // we use the layoutEffect to check if the user has provided consent.
   );
-  const [selectedKeys] = useState<EssentialAnalyticsTagsTupleArrays>(() => {
+  const [selectedKeys] = useState<EssentialTagsTupleArrays>(() => {
     // coerce tags into selectedKeys shape
     const hasEssentialTags = essentialTags && checkEssentialTags(essentialTags);
-    const hasAnalyticsTags = analyticsTags && checkTargetingTags(analyticsTags);
+    const hasAnalyticsTags =
+      nonEssentialTags && checkTargetingTags(nonEssentialTags);
 
     return [
       hasEssentialTags ? essentialTags : [], // essential tags should never be empty
-      hasAnalyticsTags ? analyticsTags : [], // analytics tags can be empty
+      hasAnalyticsTags ? nonEssentialTags : [], // analytics tags can be empty
     ];
   });
 
@@ -103,10 +115,10 @@ export default function TrnsprncyProvider(
       // set the default consent based on the user provided initialConsent
       // if the user has not provided any initialConsent, then the default consent will be set to 'denied' for all tags
 
-      const defaultConsent = getInitialPermissions(essentialTags, [
-        ...ESSENTIAL_TAGS,
-        ...ANALYTICS_TAGS,
-      ]);
+      const defaultConsent = getInitialPermissions(
+        essentialTags,
+        nonEssentialTags ?? []
+      );
       gtag("consent", "default", defaultConsent);
       redact && gtag("set", redactionCookie, true);
 
@@ -153,9 +165,6 @@ export default function TrnsprncyProvider(
     },
     [consentCookie, expiry, updateGTMConsent, selectedKeys]
   );
-
-  // makeshift slot component
-  // const BannerSlot = enabled && !hasConsent && banner ? banner : () => null;
 
   return (
     <ConsentManager.Provider

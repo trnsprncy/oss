@@ -45,17 +45,17 @@ export function setConsentCookies(
  *
  * @export
  * @param  {string[]} essentialTags
- * @param  {string[]} analyticsTags
+ * @param  {string[]} nonEssentialTags
  * @return ConsentResult {*}
  *
  */
 export function getInitialPermissions(
   essentialTags: string[],
-  analyticsTags: string[]
+  nonEssentialTags: string[]
 ): ConsentResult {
   const consentResult = {} as ConsentResult;
 
-  for (const tag of [...essentialTags, ...analyticsTags]) {
+  for (const tag of [...essentialTags, ...nonEssentialTags]) {
     consentResult[tag as keyof ConsentResult] = essentialTags.includes(tag)
       ? "granted"
       : "denied";
