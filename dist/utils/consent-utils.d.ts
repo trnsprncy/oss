@@ -26,8 +26,8 @@ export declare function setConsentCookies(cookies: ConsentResult, appCookie: str
  *
  * @export
  * @param  {string[]} essentialTags
- * @param  {string[]} analyticsTags
+ * @param  {string[]} nonEssentialTags
  * @return ConsentResult {*}
  *
  */
-export declare function getInitialPermissions(essentialTags: string[], analyticsTags: string[]): ConsentResult;
+export declare function getInitialPermissions(essentialTags: string[], nonEssentialTags: string[]): ConsentResult;

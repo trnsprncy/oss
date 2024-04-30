@@ -1,4 +1,4 @@
-import { ANALYTICS_TAGS, ESSENTIAL_TAGS } from "./constants";
+import { ESSENTIAL_TAGS } from "./constants";
 // These utils are used by consent manager component to validate the tags that the user has opted out of
 /**
  * Check if the user has opted out of all essential tags
@@ -23,7 +23,7 @@ export function checkEssentialTags(tags) {
  * Check if the user has opted out of all tracking tags
  * This will return a warning if the user has opted out of all tracking tags
  *
- * @param {AnalyticsTags[]} tags
+ * @param {NonEssentialTags[]} tags
  * @return {*} {boolean}
  */
 export function checkTargetingTags(tags) {
@@ -31,5 +31,5 @@ export function checkTargetingTags(tags) {
         console.warn("You have opted out of all tracking tags. Please ensure that this was intentional.");
         return false;
     }
-    return tags.every(function (tag) { return ANALYTICS_TAGS.includes(tag); });
+    return tags.every(function (tag) { return ESSENTIAL_TAGS.includes(tag); });
 }

@@ -4,4 +4,3 @@ export declare const TAG_MANAGER_KEY = "gtag";
 export declare const redactionCookie = "ads_data_redaction";
 export declare const cookieExpiry: number;
 export declare const ESSENTIAL_TAGS: string[];
-export declare const ANALYTICS_TAGS: string[];

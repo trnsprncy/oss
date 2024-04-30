@@ -10,9 +10,3 @@ export var ESSENTIAL_TAGS = [
     "functionality_storage",
     "personalization_storage",
 ];
-export var ANALYTICS_TAGS = [
-    "ad_storage",
-    "analytics_storage",
-    "ad_personalization",
-    "ad_user_data",
-];

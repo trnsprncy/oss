@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
-import type { AnalyticsTags, EssentialTags } from "../types";
+import type { NonEssentialTags, EssentialTags } from "../types";
 type NotEmptyArray<T> = [T, ...T[]];
 type TrnsprncyProviderProps = {
     consentCookie?: string;
     essentialTags?: NotEmptyArray<EssentialTags>;
-    analyticsTags?: AnalyticsTags[];
+    nonEssentialTags?: NonEssentialTags[];
     enabled?: boolean;
     expiry?: number;
     redact?: boolean;
@@ -16,7 +16,7 @@ type TrnsprncyProviderProps = {
  *
  * @export
  * @param {PropsWithChildren<TrnsprncyProviderProps>} {
- *   consentCookie: string, essentialTags: EssentialTags[], analyticsTags: AnalyticsTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ *   consentCookie: string, essentialTags: EssentialTags[], nonEssentialTags: NonEssentialTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */

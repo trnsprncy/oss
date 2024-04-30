@@ -27,7 +27,7 @@ export function convertCookieToConsent(cookie) {
 /**
  * Convert the user provided tags into a cookie object
  *
- * @param {EssentialAnalyticsTagsTupleArrays} selectedTags
+ * @param {EssentialTagsTupleArrays} selectedTags
  * @return {*}  {Permission}
  */
 export function convertTagsToCookies(selectedTags) {

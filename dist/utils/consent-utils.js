@@ -45,13 +45,13 @@ export function setConsentCookies(cookies, appCookie, customExpiry) {
  *
  * @export
  * @param  {string[]} essentialTags
- * @param  {string[]} analyticsTags
+ * @param  {string[]} nonEssentialTags
  * @return ConsentResult {*}
  *
  */
-export function getInitialPermissions(essentialTags, analyticsTags) {
+export function getInitialPermissions(essentialTags, nonEssentialTags) {
     var consentResult = {};
-    for (var _i = 0, _a = __spreadArray(__spreadArray([], essentialTags, true), analyticsTags, true); _i < _a.length; _i++) {
+    for (var _i = 0, _a = __spreadArray(__spreadArray([], essentialTags, true), nonEssentialTags, true); _i < _a.length; _i++) {
         var tag = _a[_i];
         consentResult[tag] = essentialTags.includes(tag)
             ? "granted"

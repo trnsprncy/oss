@@ -1,6 +1,6 @@
 export declare function useConsent(): {
     consentCookie: string;
-    tags: import("../types").EssentialAnalyticsTagsTupleArrays;
+    tags: import("../types").EssentialTagsTupleArrays;
     hasConsent: boolean;
 };
 export declare function useConsentDispatch(): {

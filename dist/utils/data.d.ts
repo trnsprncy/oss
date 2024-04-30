@@ -1,6 +1,6 @@
-import { AnalyticsTags, EssentialTags } from "../types";
+import { NonEssentialTags, EssentialTags } from "../types";
 type TagDetails = {
-    [key in EssentialTags | AnalyticsTags]: {
+    [key in EssentialTags | NonEssentialTags]: {
         label: string;
         description: string;
     };
