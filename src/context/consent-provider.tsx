@@ -25,86 +25,87 @@ import {
   redactionCookie,
 } from "../utils/constants";
 import {
-  checkEssentialTags,
-  checkTargetingTags,
-} from "../utils/validation-utils";
-import {
   convertCookieToConsent,
   convertTagsToCookies,
 } from "../utils/cookie-conversion-utils";
 import { handlers } from "../utils/handlers";
 import type {
-  NonEssentialTags,
   BrowserCookies,
   ConsentResult,
   EssentialTagsTupleArrays,
-  EssentialTags,
+  Tag,
 } from "../types";
 
-type NotEmptyArray<T> = [T, ...T[]];
-
-type TrnsprncyProviderProps = {
+type TrnsprncyProviderProps = PropsWithChildren<{
   consentCookie?: string;
-  essentialTags?: NotEmptyArray<EssentialTags>;
-  nonEssentialTags?: NonEssentialTags[];
+  essentialTags: Tag[];
+  nonEssentialTags?: Tag[];
   enabled?: boolean;
   expiry?: number;
   redact?: boolean;
   dataLayerName?: string;
   gtagName?: string;
-};
+  banner?: React.ReactNode;
+}>;
 
 /**
- *
- *
  * @export
  * @param {PropsWithChildren<TrnsprncyProviderProps>} {
- *   consentCookie: string, essentialTags: EssentialTags[], nonEssentialTags: NonEssentialTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ *   consentCookie: string, essentialTags: NonEmptyArray<Tag>, nonEssentialTags: Tag[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
 export default function TrnsprncyProvider(
   // type AdditionalTags<T extends string> = T[]; // @TODO: add support for additional tags
-  props: PropsWithChildren<TrnsprncyProviderProps>
-) {
-  const {
+  {
     consentCookie = CONSENT_COOKIE_NAME, // the name of the cookie that stores the user's consent
     essentialTags,
-    nonEssentialTags,
+    nonEssentialTags = [
+      "personalization_storage",
+      "security_storage",
+      "security_storage",
+    ],
     enabled = true,
     expiry = cookieExpiry,
     redact = true,
     dataLayerName = DATA_LAYER,
     gtagName = TAG_MANAGER_KEY,
+    banner,
     children,
-  } = props;
-
+  }: TrnsprncyProviderProps
+) {
   if (nonEssentialTags) {
-    // ensure that non-essential tags are not duplicated in the essential tags
-    nonEssentialTags.forEach((tag) => {
-      if (essentialTags?.includes(tag)) {
-        throw new Error(
-          `trnsprncy: ${tag} is an essential tag and cannot be included in the non-essential tags array.`
-        );
-      }
-    });
+    // enforce that non-essential tags are not included in the essential tags
+    nonEssentialTags = nonEssentialTags
+      .map((tag) => {
+        if (essentialTags.includes(tag)) {
+          return false;
+        }
+        return tag;
+      })
+      .filter(Boolean) as Tag[];
   }
 
   const cookies = JSON.parse(getCookie(consentCookie) || "{}");
+
   const [hasConsent, setHasConsent] = useState<boolean>(
-    enabled
-    // has consent starts off as equal to enabled value
-    // we use the layoutEffect to check if the user has provided consent.
+    !!Object.keys(cookies).length
   );
   const [selectedKeys] = useState<EssentialTagsTupleArrays>(() => {
-    // coerce tags into selectedKeys shape
-    const hasEssentialTags = essentialTags && checkEssentialTags(essentialTags);
-    const hasAnalyticsTags =
-      nonEssentialTags && checkTargetingTags(nonEssentialTags);
+    // coerce user provided tags into consent shape and check if they are valid
 
     return [
-      hasEssentialTags ? essentialTags : [], // essential tags should never be empty
-      hasAnalyticsTags ? nonEssentialTags : [], // analytics tags can be empty
+      essentialTags.every((tag) => {
+        const isEssentialTag = ESSENTIAL_TAGS.includes(tag);
+        if (!isEssentialTag)
+          console.warn("Invalid essential tag provided: ", tag);
+        return isEssentialTag;
+      })
+        ? essentialTags
+        : undefined,
+      nonEssentialTags.every((tag) => ESSENTIAL_TAGS.includes(tag))
+        ? nonEssentialTags
+        : undefined,
     ];
   });
 
@@ -143,17 +144,23 @@ export default function TrnsprncyProvider(
   const handleConsentUpdate = useCallback(
     (consentUpdate: Partial<BrowserCookies>) => {
       try {
-        const _cookies = JSON.parse(getCookie(consentCookie) || "{}");
+        // build up the current cookie tags from the consent cookie
+        const _cookieTags = JSON.parse(getCookie(consentCookie) || "{}");
 
-        const _updatedCookie = {
-          ...convertTagsToCookies(selectedKeys),
-          ..._cookies,
-          ...consentUpdate,
-        };
+        let _updatedCookie = Object.assign(
+          {},
+          convertTagsToCookies(selectedKeys),
+          Object.keys(_cookieTags).length ? _cookieTags : {}
+        );
 
-        // update the consent cookie
+        // update the consent cookie with the new consent
+        if (consentUpdate) {
+          _updatedCookie = Object.assign({}, _updatedCookie, consentUpdate);
+        }
+
+        // apply the updates to the consent cookie state
         setConsentCookies(_updatedCookie, consentCookie, expiry);
-        // transform_updatedCookie  to consent
+        // transform _updatedCookie  to consent
         const consent = convertCookieToConsent(_updatedCookie);
         // update the consent in GTM
         updateGTMConsent(consent);
@@ -174,12 +181,15 @@ export default function TrnsprncyProvider(
         value={{ handleConsentUpdate, sendGTMEvent, setHasConsent }}
       >
         {enabled && hasConsent ? (
-          <GoogleTagManager
-            gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!}
-            dataLayerName={dataLayerName}
-          />
+          <>
+            <GoogleTagManager
+              gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!}
+              dataLayerName={dataLayerName}
+            />
+            {children}
+          </>
         ) : (
-          children
+          banner ?? null
         )}
       </ConsentDispatch.Provider>
     </ConsentManager.Provider>

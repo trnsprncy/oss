@@ -1,3 +1,2 @@
 export { ESSENTIAL_TAGS } from "./constants";
-export { convertTagsToCookies } from "./cookie-conversion-utils";
-export * from "./handlers";
+export { convertTagsToCookies, convertCookieToConsent } from "./cookie-conversion-utils";
