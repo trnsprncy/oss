@@ -1,60 +1,57 @@
 "use client";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-import { jsx as _jsx } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useLayoutEffect, } from "react";
 import { getCookie } from "cookies-next";
 import { sendGTMEvent, GoogleTagManager } from "@next/third-parties/google";
 import { ConsentManager, ConsentDispatch } from "./consent-context";
 import { setConsentCookies, getInitialPermissions, } from "../utils/consent-utils";
 import { gtagFn } from "../utils/gtag";
-import { CONSENT_COOKIE_NAME, DATA_LAYER, TAG_MANAGER_KEY, cookieExpiry, redactionCookie, } from "../utils/constants";
-import { checkEssentialTags, checkTargetingTags, } from "../utils/validation-utils";
+import { ESSENTIAL_TAGS, CONSENT_COOKIE_NAME, DATA_LAYER, TAG_MANAGER_KEY, cookieExpiry, redactionCookie, } from "../utils/constants";
 import { convertCookieToConsent, convertTagsToCookies, } from "../utils/cookie-conversion-utils";
 import { handlers } from "../utils/handlers";
 /**
- *
- *
  * @export
  * @param {PropsWithChildren<TrnsprncyProviderProps>} {
- *   consentCookie: string, essentialTags: EssentialTags[], nonEssentialTags: NonEssentialTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ *   consentCookie: string, essentialTags: NonEmptyArray<Tag>, nonEssentialTags: Tag[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
 export default function TrnsprncyProvider(
 // type AdditionalTags<T extends string> = T[]; // @TODO: add support for additional tags
-props) {
-    var _a = props.consentCookie, consentCookie = _a === void 0 ? CONSENT_COOKIE_NAME : _a, // the name of the cookie that stores the user's consent
-    essentialTags = props.essentialTags, nonEssentialTags = props.nonEssentialTags, _b = props.enabled, enabled = _b === void 0 ? true : _b, _c = props.expiry, expiry = _c === void 0 ? cookieExpiry : _c, _d = props.redact, redact = _d === void 0 ? true : _d, _e = props.dataLayerName, dataLayerName = _e === void 0 ? DATA_LAYER : _e, _f = props.gtagName, gtagName = _f === void 0 ? TAG_MANAGER_KEY : _f, children = props.children;
+_a) {
+    var _b = _a.consentCookie, consentCookie = _b === void 0 ? CONSENT_COOKIE_NAME : _b, // the name of the cookie that stores the user's consent
+    essentialTags = _a.essentialTags, _c = _a.nonEssentialTags, nonEssentialTags = _c === void 0 ? [
+        "personalization_storage",
+        "security_storage",
+        "security_storage",
+    ] : _c, _d = _a.enabled, enabled = _d === void 0 ? true : _d, _e = _a.expiry, expiry = _e === void 0 ? cookieExpiry : _e, _f = _a.redact, redact = _f === void 0 ? true : _f, _g = _a.dataLayerName, dataLayerName = _g === void 0 ? DATA_LAYER : _g, _h = _a.gtagName, gtagName = _h === void 0 ? TAG_MANAGER_KEY : _h, banner = _a.banner, children = _a.children;
     if (nonEssentialTags) {
-        // ensure that non-essential tags are not duplicated in the essential tags
-        nonEssentialTags.forEach(function (tag) {
-            if (essentialTags === null || essentialTags === void 0 ? void 0 : essentialTags.includes(tag)) {
-                throw new Error("trnsprncy: ".concat(tag, " is an essential tag and cannot be included in the non-essential tags array."));
+        // enforce that non-essential tags are not included in the essential tags
+        nonEssentialTags = nonEssentialTags
+            .map(function (tag) {
+            if (essentialTags.includes(tag)) {
+                return false;
             }
-        });
+            return tag;
+        })
+            .filter(Boolean);
     }
     var cookies = JSON.parse(getCookie(consentCookie) || "{}");
-    var _g = useState(enabled
-    // has consent starts off as equal to enabled value
-    // we use the layoutEffect to check if the user has provided consent.
-    ), hasConsent = _g[0], setHasConsent = _g[1];
+    var _j = useState(!!Object.keys(cookies).length), hasConsent = _j[0], setHasConsent = _j[1];
     var selectedKeys = useState(function () {
-        // coerce tags into selectedKeys shape
-        var hasEssentialTags = essentialTags && checkEssentialTags(essentialTags);
-        var hasAnalyticsTags = nonEssentialTags && checkTargetingTags(nonEssentialTags);
+        // coerce user provided tags into consent shape and check if they are valid
         return [
-            hasEssentialTags ? essentialTags : [], // essential tags should never be empty
-            hasAnalyticsTags ? nonEssentialTags : [], // analytics tags can be empty
+            essentialTags.every(function (tag) {
+                var isEssentialTag = ESSENTIAL_TAGS.includes(tag);
+                if (!isEssentialTag)
+                    console.warn("Invalid essential tag provided: ", tag);
+                return isEssentialTag;
+            })
+                ? essentialTags
+                : undefined,
+            nonEssentialTags.every(function (tag) { return ESSENTIAL_TAGS.includes(tag); })
+                ? nonEssentialTags
+                : undefined,
         ];
     })[0];
     useLayoutEffect(function () {
@@ -85,11 +82,16 @@ props) {
     }, [dataLayerName, gtagName]);
     var handleConsentUpdate = useCallback(function (consentUpdate) {
         try {
-            var _cookies = JSON.parse(getCookie(consentCookie) || "{}");
-            var _updatedCookie = __assign(__assign(__assign({}, convertTagsToCookies(selectedKeys)), _cookies), consentUpdate);
-            // update the consent cookie
+            // build up the current cookie tags from the consent cookie
+            var _cookieTags = JSON.parse(getCookie(consentCookie) || "{}");
+            var _updatedCookie = Object.assign({}, convertTagsToCookies(selectedKeys), Object.keys(_cookieTags).length ? _cookieTags : {});
+            // update the consent cookie with the new consent
+            if (consentUpdate) {
+                _updatedCookie = Object.assign({}, _updatedCookie, consentUpdate);
+            }
+            // apply the updates to the consent cookie state
             setConsentCookies(_updatedCookie, consentCookie, expiry);
-            // transform_updatedCookie  to consent
+            // transform _updatedCookie  to consent
             var consent = convertCookieToConsent(_updatedCookie);
             // update the consent in GTM
             updateGTMConsent(consent);
@@ -100,5 +102,5 @@ props) {
             console.error(error);
         }
     }, [consentCookie, expiry, updateGTMConsent, selectedKeys]);
-    return (_jsx(ConsentManager.Provider, { value: { tags: selectedKeys, consentCookie: consentCookie, hasConsent: hasConsent }, children: _jsx(ConsentDispatch.Provider, { value: { handleConsentUpdate: handleConsentUpdate, sendGTMEvent: sendGTMEvent, setHasConsent: setHasConsent }, children: enabled && hasConsent ? (_jsx(GoogleTagManager, { gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID, dataLayerName: dataLayerName })) : (children) }) }));
+    return (_jsx(ConsentManager.Provider, { value: { tags: selectedKeys, consentCookie: consentCookie, hasConsent: hasConsent }, children: _jsx(ConsentDispatch.Provider, { value: { handleConsentUpdate: handleConsentUpdate, sendGTMEvent: sendGTMEvent, setHasConsent: setHasConsent }, children: enabled && hasConsent ? (_jsxs(_Fragment, { children: [_jsx(GoogleTagManager, { gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID, dataLayerName: dataLayerName }), children] })) : (banner !== null && banner !== void 0 ? banner : null) }) }));
 }

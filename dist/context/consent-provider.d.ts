@@ -1,26 +1,25 @@
-import { PropsWithChildren } from "react";
-import type { NonEssentialTags, EssentialTags } from "../types";
-type NotEmptyArray<T> = [T, ...T[]];
-type TrnsprncyProviderProps = {
+import React, { PropsWithChildren } from "react";
+import type { Tag } from "../types";
+type TrnsprncyProviderProps = PropsWithChildren<{
     consentCookie?: string;
-    essentialTags?: NotEmptyArray<EssentialTags>;
-    nonEssentialTags?: NonEssentialTags[];
+    essentialTags: Tag[];
+    nonEssentialTags?: Tag[];
     enabled?: boolean;
     expiry?: number;
     redact?: boolean;
     dataLayerName?: string;
     gtagName?: string;
-};
+    banner?: React.ReactNode;
+}>;
 /**
- *
- *
  * @export
  * @param {PropsWithChildren<TrnsprncyProviderProps>} {
- *   consentCookie: string, essentialTags: EssentialTags[], nonEssentialTags: NonEssentialTags[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, banner: React.ReactNode, children: React.ReactNode
+ *   consentCookie: string, essentialTags: NonEmptyArray<Tag>, nonEssentialTags: Tag[], enabled: boolean, expiry: number, redact: boolean, dataLayerName: string, gtagName: string, children: React.ReactNode
  * }
  * @return {*} {React.ReactNode}
  */
-export default function TrnsprncyProvider(props: PropsWithChildren<TrnsprncyProviderProps>): import("react/jsx-runtime").JSX.Element;
+export default function TrnsprncyProvider({ consentCookie, // the name of the cookie that stores the user's consent
+essentialTags, nonEssentialTags, enabled, expiry, redact, dataLayerName, gtagName, banner, children, }: TrnsprncyProviderProps): import("react/jsx-runtime").JSX.Element;
 export {};
 /**
  * @TODO:

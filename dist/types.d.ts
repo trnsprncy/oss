@@ -1,5 +1,6 @@
-export type EssentialTags = "functionality_storage" | "personalization_storage" | "security_storage";
-export type NonEssentialTags = EssentialTags;
+export type Tag = "functionality_storage" | "personalization_storage" | "security_storage";
+export type EssentialTags = Tag;
+export type NonEssentialTags = Tag;
 export type EssentialCookies = {
     [key in EssentialTags]: boolean;
 };

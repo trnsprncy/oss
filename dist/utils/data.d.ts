@@ -8,6 +8,6 @@ type TagDetails = {
 export declare const tagDetails: TagDetails;
 export declare const categoryDescriptions: {
     essential: string;
-    analytics: string;
+    "non-essential": string;
 };
 export {};
