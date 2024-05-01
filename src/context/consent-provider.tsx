@@ -45,7 +45,6 @@ type TrnsprncyProviderProps = PropsWithChildren<{
   redact?: boolean;
   dataLayerName?: string;
   gtagName?: string;
-  banner?: React.ReactNode;
 }>;
 
 /**
@@ -70,7 +69,6 @@ export default function TrnsprncyProvider(
     redact = true,
     dataLayerName = DATA_LAYER,
     gtagName = TAG_MANAGER_KEY,
-    banner,
     children,
   }: TrnsprncyProviderProps
 ) {
@@ -186,10 +184,9 @@ export default function TrnsprncyProvider(
               gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!}
               dataLayerName={dataLayerName}
             />
-            {children}
           </>
         ) : (
-          banner ?? null
+          children
         )}
       </ConsentDispatch.Provider>
     </ConsentManager.Provider>

@@ -1,5 +1,5 @@
 "use client";
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useCallback, useLayoutEffect, } from "react";
 import { getCookie } from "cookies-next";
 import { sendGTMEvent, GoogleTagManager } from "@next/third-parties/google";
@@ -24,7 +24,7 @@ _a) {
         "personalization_storage",
         "security_storage",
         "security_storage",
-    ] : _c, _d = _a.enabled, enabled = _d === void 0 ? true : _d, _e = _a.expiry, expiry = _e === void 0 ? cookieExpiry : _e, _f = _a.redact, redact = _f === void 0 ? true : _f, _g = _a.dataLayerName, dataLayerName = _g === void 0 ? DATA_LAYER : _g, _h = _a.gtagName, gtagName = _h === void 0 ? TAG_MANAGER_KEY : _h, banner = _a.banner, children = _a.children;
+    ] : _c, _d = _a.enabled, enabled = _d === void 0 ? true : _d, _e = _a.expiry, expiry = _e === void 0 ? cookieExpiry : _e, _f = _a.redact, redact = _f === void 0 ? true : _f, _g = _a.dataLayerName, dataLayerName = _g === void 0 ? DATA_LAYER : _g, _h = _a.gtagName, gtagName = _h === void 0 ? TAG_MANAGER_KEY : _h, children = _a.children;
     if (nonEssentialTags) {
         // enforce that non-essential tags are not included in the essential tags
         nonEssentialTags = nonEssentialTags
@@ -102,5 +102,5 @@ _a) {
             console.error(error);
         }
     }, [consentCookie, expiry, updateGTMConsent, selectedKeys]);
-    return (_jsx(ConsentManager.Provider, { value: { tags: selectedKeys, consentCookie: consentCookie, hasConsent: hasConsent }, children: _jsx(ConsentDispatch.Provider, { value: { handleConsentUpdate: handleConsentUpdate, sendGTMEvent: sendGTMEvent, setHasConsent: setHasConsent }, children: enabled && hasConsent ? (_jsxs(_Fragment, { children: [_jsx(GoogleTagManager, { gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID, dataLayerName: dataLayerName }), children] })) : (banner !== null && banner !== void 0 ? banner : null) }) }));
+    return (_jsx(ConsentManager.Provider, { value: { tags: selectedKeys, consentCookie: consentCookie, hasConsent: hasConsent }, children: _jsx(ConsentDispatch.Provider, { value: { handleConsentUpdate: handleConsentUpdate, sendGTMEvent: sendGTMEvent, setHasConsent: setHasConsent }, children: enabled && hasConsent ? (_jsx(_Fragment, { children: _jsx(GoogleTagManager, { gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID, dataLayerName: dataLayerName }) })) : (children) }) }));
 }
